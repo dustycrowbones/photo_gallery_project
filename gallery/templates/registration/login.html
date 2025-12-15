@@ -7,13 +7,13 @@
 </head>
 <body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
 
-    <div class="photo-card" style="width: 300px; padding: 30px; text-align: center;">
+    <div class="photo-card" style="width: 300px; padding: 50px; text-align: center;">
         <h2 style="margin-top: 0;">Welcome Back</h2>
         
         <form method="post">
             {% csrf_token %}
             
-            <div style="margin-bottom: 15px; text-align: left;">
+            <div style="width: 105%; margin-bottom: 15px; text-align: left;">
                 <label>Username:</label><br>
                 {{ form.username }}
             </div>
