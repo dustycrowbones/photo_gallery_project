@@ -1,0 +1,280 @@
+/* style.css - yassified version of the app 💅 */
+
+/* --- GLOBAL BODY STYLES --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    
+    /* 1. THE WARM SUNSET GRADIENT */
+    background: linear-gradient(120deg, #e0c159 0%, #d86647 100%);
+    
+    /* Critical: Forces gradient to cover the whole screen even if content is short */
+    min-height: 100vh; 
+}
+
+/* --- THE NOISE TEXTURE OVERLAY 📺 --- */
+body::before {
+    content: "";
+    position: fixed; /* Keeps the grain still while you scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* The SVG Noise Pattern */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+    
+    /* Intensity: Change 0.08 to 0.15 for more grain, or 0.04 for less */
+    opacity: 0.10; 
+    
+    /* Sit on top of everything, but allow clicks to pass through */
+    z-index: 5;
+    pointer-events: none; 
+}
+h1, h2 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* Links */
+a {
+    color: #e91e63; /* Hot Pink links */
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: underline;
+    color: #c2185b;
+}
+
+/* --- BUTTONS (The Polish) --- */
+button, .btn {
+    height: fit-content;
+    z-index: 2000;
+    padding: 10px 20px;
+    background-color: #e91e63; /* Hot Pink */
+    color: white !important; /* Force text to be white, ignoring link colors */
+    border: none;
+    border-radius: 25px; 
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.1s, background-color 0.2s;
+    text-decoration: none !important; /* Never underline a button */
+    
+    /* Alignment Magic */
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2; 
+    margin: 0; /* Remove random default margins */
+}
+
+button:hover, .btn:hover {
+    background-color: #a81550;
+    transform: scale(1.05);
+    color: white !important;
+}
+
+/* Secondary Button (Gray) */
+.btn-secondary {
+    background-color: #888;
+}
+.btn-secondary:hover {
+    background-color: #484747;
+}
+
+/* --- FORMS --- */
+form {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* --- THE PHOTO GRID --- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.photo-card {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.photo-card:hover {
+    transform: translateY(-5px);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+
+/* --- THE MODAL (Pop-up) --- */
+.modal {
+    display: none;
+    position: fixed; 
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    display: flex;
+    background-color: white;
+    width: 90%;
+    max-width: 900px;
+    height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.modal-image-box {
+    flex: 100%;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.modal-info-box {
+    flex: 40%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+}
+.close-btn:hover { color: #000; }
+
+/* --- FORM GLOW UP ✨ --- */
+
+/* Target all the input types */
+input[type="text"], 
+textarea, 
+select {
+    width: 100%;            /* Fill the container */
+    padding: 12px 15px;     /* nice internal spacing */
+    border: 1px solid #ddd; /* subtle border */
+    border-radius: 8px;     /* soft corners */
+    margin-bottom: 20px;    /* spacing between fields */
+    box-sizing: border-box; /* keeps width consistent */
+    font-family: inherit;   /* use our nice font */
+    font-size: 14px;
+    background-color: #fcfcfc;
+}
+
+/* Focus state: When you click inside */
+input[type="text"]:focus, 
+textarea:focus, 
+select:focus {
+    border-color: #e91e63; /* Pink highlight */
+    outline: none;
+    background-color: #fff;
+}
+
+/* The big text box */
+textarea {
+    resize: vertical; /* User can stretch it down, but not wide */
+    min-height: 100px;
+}
+
+/* Labels */
+label {
+    display: block; /* Force label to its own line */
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+    text-transform: uppercase; /* tiny stylish caps */
+    letter-spacing: 0.5px;
+}
+
+/* The File Chooser  */
+input[type="file"] {
+    background: white;
+    padding: 10px;
+    border: 2px dashed #ddd; /* Dashed box looks like a "drop zone" */
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+input[type="file"]:hover {
+    border-color: #e91e63;
+}
+
+/* --- CAROUSEL ARROWS --- */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.05); /* See-through black */
+    color: rgba(255, 255, 255, 0.15) !important;
+    border: none;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 100; /* Above the image */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.25s;
+}
+
+.nav-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* Darker on hover */
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-50%) scale(1.1); /* Slight pop */
+}
+
+.nav-arrow.left { left: 15px; }
+.nav-arrow.right { right: 15px; }

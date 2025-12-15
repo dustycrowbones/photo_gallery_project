@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ folder.name }}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'home' %}">← Back to Home</a>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="margin-bottom: 20px; color: blanchedalmond;">{{ folder.name }}</h1>
+            
+            {% if folder.user == request.user %}
+                <div style="display: flex; gap: 20px; justify-content:center; align-items: center;">
+                    
+                    <div>
+                        <a href="/upload/" class="btn">➕ Upload Photo</a>
+                    </div>
+                    
+                    
+                    <a href="{% url 'edit_folder' folder.id %}" class="btn" style="background: #882244; font-size: 0.8em; padding: 8px 15px;">
+                        ✏️ Rename
+                    </a>
+
+                    <form action="{% url 'delete_folder' folder.id %}" method="post" style="margin: 0;"
+                          onsubmit="return confirm('⚠️ ARE YOU SURE?\n\nThis will delete the album AND all photos inside it.\nThis cannot be undone.');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" style="background-color: #311310; font-size: 0.8em; padding: 8px 15px;">
+                            🗑️ Delete Album
+                        </button>
+                    </form>
+
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="gallery-grid">
+            
+            {% for image in images %}
+                <div class="photo-card"
+                     data-url="{{ image.image_file.url }}"
+                     data-title="{{ image.title }}"
+                     data-desc="{{ image.description }}"
+                     data-tags="{% for tag in image.tags.all %}#{{ tag.name }} {% endfor %}"
+                     onclick="openModal(this)">
+                     
+                    {% if image.thumbnail_file %}
+                        <img src="{{ image.thumbnail_file.url }}">
+                    {% else %}
+                        <img src="{{ image.image_file.url }}">
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h3 class="card-title">{{ image.title }}</h3>
+                        
+                        {% if image.user == request.user %}
+                            <a href="{% url 'edit_image' image.id %}" 
+                               style="font-size: 0.8em; color: #999; display: inline-block; margin-top: 5px; z-index: 10;"
+                               onclick="event.stopPropagation()">
+                               ✏️ Edit / Delete
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p style="text-align: center; width: 100%; grid-column: 1 / -1;">No photos in this album yet.</p>
+            {% endfor %}
+            </div>
+    </div>
+
+    <div id="myModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            
+            <div class="modal-image-box" style="position: relative;">
+                <button class="nav-arrow left" onclick="changeImage(-1)">&#10094;</button>
+                <img id="modalImage" src="" alt="Full Size">
+                <button class="nav-arrow right" onclick="changeImage(1)">&#10095;</button>
+            </div>
+
+            <div class="modal-info-box">
+                <span class="close-btn" onclick="closeModal(event)">&times;</span>
+                <h2 id="modalTitle" style="margin-top: 0;"></h2>
+                <p id="modalDesc" style="color: #666;"></p>
+                <p id="modalTags" style="color: #e91e63; font-weight: bold; margin-top: auto;"></p>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+
+        // --- Carousel & Modal Logic ---
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("modalImage");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDesc = document.getElementById("modalDesc");
+        const modalTags = document.getElementById("modalTags");
+        let currentCard = null;
+
+        function openModal(cardElement) {
+            currentCard = cardElement;
+            updateModalContent();
+            modal.style.display = "flex";
+        }
+
+        function updateModalContent() {
+            if (!currentCard) return;
+            modalImg.src = currentCard.getAttribute('data-url');
+            modalTitle.innerText = currentCard.getAttribute('data-title');
+            modalDesc.innerText = currentCard.getAttribute('data-desc');
+            modalTags.innerText = currentCard.getAttribute('data-tags');
+        }
+
+        function changeImage(direction) {
+            if (!currentCard) return;
+            const allCards = Array.from(document.querySelectorAll('.photo-card'));
+            const currentIndex = allCards.indexOf(currentCard);
+            let newIndex = currentIndex + direction;
+            
+            if (newIndex < 0) newIndex = allCards.length - 1;
+            else if (newIndex >= allCards.length) newIndex = 0;
+
+            currentCard = allCards[newIndex];
+            updateModalContent();
+        }
+
+        function closeModal(event) {
+            if (event.target === modal || event.target.classList.contains('close-btn')) {
+                modal.style.display = "none";
+                currentCard = null;
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (modal.style.display === "flex") {
+                if (event.key === "ArrowLeft") changeImage(-1);
+                if (event.key === "ArrowRight") changeImage(1);
+                if (event.key === "Escape") {
+                    modal.style.display = "none";
+                    currentCard = null;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

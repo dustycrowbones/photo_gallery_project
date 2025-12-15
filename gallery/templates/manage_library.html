@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Library</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <a href="/">← Back to Home</a>
+        <h1 style="color: blanchedalmond;">Library Manager</h1>
+
+        <div class="header-actions">
+            <h2 style="color: blanchedalmond;">My Albums</h2>
+            <a href="{% url 'add_folder' %}" class="btn">➕ New Album</a>
+        </div>
+
+        <br>
+
+        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <table style="width: 100%; border-collapse: collapse;">
+                {% for folder in folders %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    
+                    <td style="padding: 15px; font-size: 1.1em; color: #333;">
+                        📁 <strong>{{ folder.name }}</strong>
+                    </td>
+                    
+                    <td style="text-align: right;">
+                        
+                        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+                            
+                            <a href="{% url 'edit_folder' folder.id %}" class="btn" style="font-size: 0.8em; padding: 8px 15px;">
+                                ✏️ Rename
+                            </a>
+                            
+                            <form action="{% url 'delete_folder' folder.id %}" method="post" style="margin: 0;"
+                                  onsubmit="return confirm('⚠️ ARE YOU SURE?\n\nThis will delete the album AND all photos inside it.\nThis cannot be undone.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn" style="background-color: #c0392b; font-size: 0.8em; padding: 8px 15px;">
+                                    🗑️ Delete
+                                </button>
+                            </form>
+
+                        </div>
+                        
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2" style="padding: 20px; text-align: center; color: #333;">No albums yet.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <br><br>
+
+        <div class="header-actions">
+            <h2 style="color: blanchedalmond;">Tags</h2>
+            <a href="{% url 'add_tag' %}" class="btn">➕ New Tag</a>
+        </div>
+        
+        <br>
+
+        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 10px;">
+            {% for tag in tags %}
+                <div style="background: #eee; padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 10px;">
+                    <span>#{{ tag.name }}</span>
+                    
+                    <form action="{% url 'delete_tag' tag.id %}" method="post" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" style="padding: 12px; background: #999; color: white; border: none; width: 10px; height: 20px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer;">✕</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>No tags created yet.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <a href="/">← Back to Home</a>
+
+    <h1>Results for: "{{ query }}"</h1>
+
+    <div class="gallery-grid">
+        {% for image in images %}
+            <div class="photo-card">
+                {% if image.thumbnail_file %}
+                    <img src="{{ image.thumbnail_file.url }}">
+                {% else %}
+                    <img src="{{ image.image_file.url }}">
+                {% endif %}
+                
+                <p><strong>{{ image.title }}</strong></p>
+                
+                <small style="color: #666;">
+                    in <a href="/folder/{{ image.folder.id }}/">{{ image.folder.name }}</a>
+                </small>
+            </div>
+        {% empty %}
+            <p style="text-align: center; width: 100%;">No images found with that tag.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

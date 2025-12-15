@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+
+    <div class="photo-card" style="width: 100%; max-width: 400px; padding: 40px; text-align: left; cursor: default;">
+        
+        <h2 style="margin-top: 0; text-align: center;">Join the Gallery 🖼️✨</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">Create your own private albums.</p>
+
+        <form method="post" style="align-content: center;">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <button type="submit" class="btn" style="width: 100%; margin-top: 20px; padding: 12px;">
+                Create Account
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 0.9em;">
+            Already have an account?<br>
+            <a href="{% url 'login' %}">Log In here</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

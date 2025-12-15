@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>✨Gallery.io</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 style="margin-bottom: 20px; color: blanchedalmond;">✨ Gallery.io </h1>
+
+        <div style="text-align: center; margin-bottom: 20px; color: white; padding: 3px; margin-left: auto; margin-right: auto;">
+            <p>Your private Insta. No ads, no outside pressure - upload what you like, organise easily and enjoy looking back at prcious moments.</p>
+        </div>
+
+
+
+        <div style="text-align: center; margin-bottom: 30px; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 600px; margin-left: auto; margin-right: auto;">
+            
+            {% if user.is_authenticated %}
+                <p style="font-size: 1.2em; margin-top: 0;">
+                    Welcome back, <strong style="color: #e91e63;">{{ user.username }}</strong>! 👋
+                </p>
+
+                <p>
+                    <a href="{% url 'manage_library' %}" style="font-size: 0.9em;">⚙️ Manage Albums & Tags</a>
+                </p>
+
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center;">
+                    <a href="/upload/" class="btn">➕ Upload Photo</a>
+                    <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary">🔒 Log Out</button>
+                    </form>
+                </div>
+            {% else %}
+                <p><strong>This gallery is private.</strong><br>Please log in to view albums.</p>
+                <a href="{% url 'login' %}" class="btn">🔑 Log In</a>
+            {% endif %}
+            
+        </div>
+
+        {% if user.is_authenticated %}
+            
+            <div class="header-actions" style="justify-content: center; border-bottom: none;">
+                <form action="{% url 'search_results' %}" method="get">
+                    <input type="text" name="q" placeholder="Search tags (e.g., dog, summer)..." style="width: 60%; margin: 10px;">
+                    <button type="submit" class="btn">Search</button>
+                </form>
+            </div>
+
+            <h2>Albums</h2>
+            <div class="gallery-grid">
+                {% for folder in folders %}
+                    <a href="{% url 'folder_detail' folder.id %}" class="photo-card" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: center; height: 150px; font-size: 1.5em; background: #fff;">
+                       📁 {{ folder.name }}
+                    </a>
+                {% empty %}
+                    <p>No albums found.</p>
+                {% endfor %}
+            </div>
+
+        {% endif %} </div>
+</body>
+</html>
